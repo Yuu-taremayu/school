@@ -24,7 +24,7 @@ int main(void)
 	if (comp_flag == 0) {
 		double x1 = 0, x2 = 0;
 
-		x1 = (-a[1] + sqrt(D)) / a[0];
+		x1 = (-a[1] + sqrt(D)) / (2 * a[0]);
 		x2 = a[0] / (a[2] * x1);
 
 		printf("x1 = %lf\nx2 = %lf\n", x1, x2);
@@ -33,8 +33,8 @@ int main(void)
 	else {
 		double x1_re = 0, x1_im = 0;
 
-		x1_re = -a[1] / a[0];
-		x1_im = sqrt(D) / a[0];
+		x1_re = -a[1] / (2 * a[0]);
+		x1_im = sqrt(D) / (2 * a[0]);
 		
 		printf("x1 = %lf + %lfi\nx2 = %lf - %lfi\n", x1_re, x1_im, x1_re, x1_im);
 	}
