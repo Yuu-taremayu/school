@@ -1,0 +1,31 @@
+% ./my_boadgame                                                 [20-07-20:16:25:42]
+Choose number of player(recommend:2-4):4
+1 player, tell me your name(MAX 255 characters):alice
+2 player, tell me your name(MAX 255 characters):bob
+3 player, tell me your name(MAX 255 characters):mary
+4 player, tell me your name(MAX 255 characters):aaa
+
+---1 player---
+name:alice
+roulette numbers:0 0 0 0 
+operands:0 0 0 
+score:0
+
+---2 player---
+name:bob
+roulette numbers:0 0 0 0 
+operands:0 0 0 
+score:0
+
+---3 player---
+name:mary
+roulette numbers:0 0 0 0 
+operands:0 0 0 
+score:0
+
+---4 player---
+name:aaa
+roulette numbers:0 0 0 0 
+operands:0 0 0 
+score:0
+
