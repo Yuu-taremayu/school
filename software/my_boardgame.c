@@ -18,6 +18,8 @@ typedef struct PLAYER
 PLAYER *init_player(PLAYER *p, int *num);
 PLAYER *roulette(PLAYER *p, int turn, int seed);
 PLAYER *decide_operand(PLAYER *p, int turn);
+int decide_timeofgame(void);
+void decide_modnum(void);
 void show_info(PLAYER *p, int num);
 
 int main(void)
@@ -26,15 +28,34 @@ int main(void)
 	int num = 0;
 	int turn = 0;
 	int seed = 0;
+	int time = 0;
+	int i, j, k;
 
 	p = init_player(p, &num);
-	p = roulette(p, turn, seed);
-	p = decide_operand(p, turn);
+	time = decide_timeofgame();
+	turn = num;
+
+	i = 0;
+	while (time > i) {
+		for (j = 0; j < ROULETTE_MAXNUM; j++) {
+			for (k = 0; k < turn; k++) {
+				p = roulette(p, k, seed);
+			}
+		}
+		decide_modnum();
+		for (j = 0; j < turn; j++) {
+			p = decide_operand(p, j);
+		}
+		i++;
+	}
 	show_info(p, num);
 
 	return 0;
 }
 
+/*	initialize players				*/
+/*	decide number of player, each player name	*/
+/*	other variables are initialized zero		*/
 PLAYER *init_player(PLAYER *p, int *num)
 {
 	/* temporary variable */
@@ -87,6 +108,8 @@ PLAYER *init_player(PLAYER *p, int *num)
 	return p;
 }
 
+/*	decide number of roulette 			*/
+/*	each players decide number at their turn	*/
 PLAYER *roulette(PLAYER *p, int turn, int seed)
 {
 	int i;
@@ -99,41 +122,49 @@ PLAYER *roulette(PLAYER *p, int turn, int seed)
 	return p;
 }
 
+/*	decide operands		*/
 PLAYER *decide_operand(PLAYER *p, int turn)
 {
 	int i;
 	int item = -1;
 	int comfirm = -1;
 
-	for (i = 0; p[turn].operand[i] != '0'; i++);
-
-	printf("choose your %d operand\n", i);
-	printf("1:+ 2:- 3:* 4:/ 5:%%\n");
+	printf("your numbers are =>");
+	for (i = 0; i < ROULETTE_MAXNUM; i++) printf(" %d", p[turn].roulette[i]);
+	printf("\n");
 
 	while (1) {
-		printf("please input your number:");
-		scanf("%d", &item);
-		switch(item) {
-			default:
-				break;
-			case 1:
-				p[turn].operand[i] = '+';
-				break;
-			case 2:
-				p[turn].operand[i] = '-';
-				break;
-			case 3:
-				p[turn].operand[i] = '*';
-				break;
-			case 4:
-				p[turn].operand[i] = '/';
-				break;
-			case 5:
-				p[turn].operand[i] = '%';
-				break;
+		for (i = 0; i < OP_MAXNUM; i++) {
+			printf("choose your %d operand\n", i);
+			printf("1:+ 2:- 3:* 4:/ 5:%%\n");
+			printf("please input your number:");
+			scanf("%d", &item);
+			switch(item) {
+				default:
+					break;
+				case 1:
+					p[turn].operand[i] = '+';
+					break;
+				case 2:
+					p[turn].operand[i] = '-';
+					break;
+				case 3:
+					p[turn].operand[i] = '*';
+					break;
+				case 4:
+					p[turn].operand[i] = '/';
+					break;
+				case 5:
+					p[turn].operand[i] = '%';
+					break;
+			}
+			printf("\n");
 		}
+		p[turn].operand[i + 1] = '\0';
 		printf("is it ok?");
-		printf("your choice => %c\n", p[turn].operand[i]);
+		printf("your choice =>");
+		for (i = 0; i < OP_MAXNUM; i++)	printf(" %c", p[turn].operand[i]);
+		printf("\n");
 		printf("if you comfirmed, type 0:");
 		scanf("%d", &comfirm);
 		if (comfirm == 0) {
@@ -143,7 +174,28 @@ PLAYER *decide_operand(PLAYER *p, int turn)
 	return p;
 }
 
+/*	decide time of game	*/
+int decide_timeofgame(void)
+{
+	int time = 0;
 
+	printf("please input time of game(recommend:1-3):");
+	scanf("%d", &time);
+	printf("\n");
+
+	return time;
+}
+
+void decide_modnum(void)
+{
+	int mod = 0;
+
+	mod = (rand() % 10) + 1;
+	printf("%d is modulo operation number\n", mod);
+	printf("\n");
+}
+
+/*	show all player's infomation		*/
 void show_info(PLAYER *p, int num)
 {
 	int i, j;
@@ -151,19 +203,23 @@ void show_info(PLAYER *p, int num)
 	for (i = 0; i < num; i++) {
 		printf("\n");
 		printf("---%d player---\n", i + 1);
+
 		printf("name:%s\n", p[i].name);
+
 		printf("roulette numbers:");
 		for (j = 0; j < ROULETTE_MAXNUM; j++) {
 			if (p[i].roulette[j] == 0) break;
 			printf("%d ", p[i].roulette[j]);
 		}
 		printf("\n");
+
 		printf("operands:");
 		for (j = 0; j < OP_MAXNUM; j++) {
 			if (p[i].operand[j] == '0') break;
 			printf("%c ", p[i].operand[j]);
 		}
 		printf("\n");
+
 		printf("score:%d\n", p[i].score);
 	}
 	printf("\n");
