@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <unistd.h>
 
 #define NAME_MAXNUM 255
 #define ROULETTE_MAXNUM 4
@@ -116,8 +117,10 @@ PLAYER *roulette(PLAYER *p, int turn, int seed)
 
 	srand(seed);
 
-	for (i = 0; p[turn].roulette[i] != 0; i++);
-	p[turn].roulette[i] = (rand() % 10) + 1;
+	for (i = 0; p[turn].roulette[i] != 0; i++) {
+		usleep(300);
+		p[turn].roulette[i] = (rand() % 10) + 1;
+	}
 
 	return p;
 }
@@ -126,22 +129,35 @@ PLAYER *roulette(PLAYER *p, int turn, int seed)
 PLAYER *decide_operand(PLAYER *p, int turn)
 {
 	int i;
-	int item = -1;
+	int item;
+	char dummy;
 	int comfirm = -1;
+	int chara_flag = 0;
 
+	/* print player's number */
 	printf("your numbers are =>");
 	for (i = 0; i < ROULETTE_MAXNUM; i++) printf(" %d", p[turn].roulette[i]);
 	printf("\n");
 
 	while (1) {
 		for (i = 0; i < OP_MAXNUM; i++) {
-			printf("choose your %d operand\n", i);
+			printf("choose your %d operand\n", i + 1);
 			printf("1:+ 2:- 3:* 4:/ 5:%%\n");
 			printf("please input your number:");
-			scanf("%d", &item);
+			scanf("%d%c", &item, &dummy);
+			while (chara_flag != 1) {
+				if (0 >= item && item <= 9) {
+					chara_flag = 1;
+				}
+				else {
+					scanf("%*[^\n]%*d");
+					printf("you can use only number.\n");
+					printf("please input your number:");
+					scanf("%d%c", &item, &dummy);
+					printf("%d\n", item);
+				}
+			}
 			switch(item) {
-				default:
-					break;
 				case 1:
 					p[turn].operand[i] = '+';
 					break;
@@ -157,10 +173,13 @@ PLAYER *decide_operand(PLAYER *p, int turn)
 				case 5:
 					p[turn].operand[i] = '%';
 					break;
+				default:
+					break;
 			}
 			printf("\n");
 		}
 		p[turn].operand[i + 1] = '\0';
+
 		printf("is it ok?");
 		printf("your choice =>");
 		for (i = 0; i < OP_MAXNUM; i++)	printf(" %c", p[turn].operand[i]);
