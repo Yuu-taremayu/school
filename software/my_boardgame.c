@@ -19,6 +19,7 @@ typedef struct PLAYER
 PLAYER *init_player(PLAYER *p, int *num);
 PLAYER *roulette(PLAYER *p, int turn, int seed);
 PLAYER *decide_operand(PLAYER *p, int turn);
+PLAYER *calc_score(PLAYER *p, int turn);
 int decide_timeofgame(void);
 void decide_modnum(void);
 void show_info(PLAYER *p, int num);
@@ -31,6 +32,8 @@ int main(void)
 	int seed = 0;
 	int time = 0;
 	int i, j, k;
+
+	srand(seed);
 
 	p = init_player(p, &num);
 	time = decide_timeofgame();
@@ -46,6 +49,7 @@ int main(void)
 		decide_modnum();
 		for (j = 0; j < turn; j++) {
 			p = decide_operand(p, j);
+			p = calc_score(p, j);
 		}
 		i++;
 	}
@@ -115,12 +119,8 @@ PLAYER *roulette(PLAYER *p, int turn, int seed)
 {
 	int i;
 
-	srand(seed);
-
-	for (i = 0; p[turn].roulette[i] != 0; i++) {
-		usleep(300);
-		p[turn].roulette[i] = (rand() % 10) + 1;
-	}
+	for (i = 0; p[turn].roulette[i] != 0; i++); 
+	p[turn].roulette[i] = (rand() % 10) + 1;
 
 	return p;
 }
@@ -132,7 +132,6 @@ PLAYER *decide_operand(PLAYER *p, int turn)
 	int item;
 	char dummy;
 	int comfirm = -1;
-	int chara_flag = 0;
 
 	/* print player's number */
 	printf("your numbers are =>");
@@ -145,18 +144,6 @@ PLAYER *decide_operand(PLAYER *p, int turn)
 			printf("1:+ 2:- 3:* 4:/ 5:%%\n");
 			printf("please input your number:");
 			scanf("%d%c", &item, &dummy);
-			while (chara_flag != 1) {
-				if (0 >= item && item <= 9) {
-					chara_flag = 1;
-				}
-				else {
-					scanf("%*[^\n]%*d");
-					printf("you can use only number.\n");
-					printf("please input your number:");
-					scanf("%d%c", &item, &dummy);
-					printf("%d\n", item);
-				}
-			}
 			switch(item) {
 				case 1:
 					p[turn].operand[i] = '+';
@@ -190,6 +177,59 @@ PLAYER *decide_operand(PLAYER *p, int turn)
 			break;
 		}
 	}
+	return p;
+}
+
+/*	calclation score from player's number and operands	*/
+PLAYER *calc_score(PLAYER *p, int turn)
+{
+	int i, j;
+	int ro_arr[ROULETTE_MAXNUM];
+	char op_arr[OP_MAXNUM];
+
+	for (i = 0; i < ROULETTE_MAXNUM; i++) {
+		ro_arr[i] = p[turn].roulette[i];
+	}
+	
+	for (i = 0; i < OP_MAXNUM; i++) {
+		op_arr[i] = p[turn].oprand[i];
+	}
+
+
+
+	for (i = k; i < OP_MAXNUM; i++) {
+		if (p[turn].operand[i] == '*') {
+			array[i] = array[i] * array[i + 1];
+			break;
+		}
+		else if (p[turn].operand[i] == '/') {
+			array[i] = array[i] / array[i + 1];
+			break;
+		}
+		else if (p[turn].operand[i] == '%') {
+			array[i] = array[i] % array[i + 1];
+			break;
+		}
+		else if (p[turn].operand[i] == '+') {
+			array[i] = array[i] + array[i + 1];
+			break;
+		}
+		else if (p[turn].operand[i] == '-') {
+			array[i] = array[i] - array[i + 1];
+			break;
+		}
+		
+	}
+	for (j = i + 1; j < ROULETTE_MAXNUM - 1; j++) {
+		array[j] = array[j + 1];
+	}
+	array[j] = 0;
+
+	for (i = 0; array[i] != 0; i++) {
+		printf("%d ", array[i]);
+	}
+	printf("\n");
+
 	return p;
 }
 
