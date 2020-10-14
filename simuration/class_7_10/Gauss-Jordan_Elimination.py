@@ -20,8 +20,10 @@ def Gauss_Jordan_Elimination(X):
 
 if __name__ == '__main__':
 
-    A = np.array([[2, 3, 4], [3, 5, 2], [4, 3, 30]], dtype=float)
-    B = np.array([[6], [5], [32]], dtype=float)
+    #A = np.array([[2, 3, 4], [3, 5, 2], [4, 3, 30]], dtype=float)
+    #B = np.array([[6], [5], [32]], dtype=float)
+    A = np.array([[7, 1, 2], [1, 8, 3], [2, 3, 9]], dtype=float)
+    B = np.array([[10], [8], [6]], dtype=float)
 
     # prepare matrix for calculation
     X = np.hstack([A, B])
