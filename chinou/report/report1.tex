@@ -1,0 +1,265 @@
+\documentclass[a4paper, titlepage]{jsarticle}
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{listings}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
+
+\title{知能システムⅡ レポート1}
+\author{三浦夢生}
+\date{2020年11月1日}
+
+\begin{document}
+	\maketitle
+
+	\section{目的}
+	現在，機械学習において用いられるデータ整形のテクニックやアルゴリズム，データに適したアルゴリズムやパラメータの見つけ方を学ぶ．
+
+	\section{用語}
+	今回用いたアルゴリズムやテクニックいくつかの解説を簡単に行う．
+
+	\subsection{Support Vector Classification}
+	Support Vector Classification(以下SVCという)とは，対象のデータセットのうち，予測に必要となる一部のデータ(これをサポートベクトルという)を決めて分類するアルゴリズムのことである．分類のための境界とサポートベクトルとの距離が最大となるような境界線を見つけることが目的となる．
+
+	\subsection{クロスバリデーション}
+	クロスバリデーションとは，学習したモデルに対し，いくつかのデータパターンを用意してアルゴリズムの妥当性やモデルの評価を行う手法である．今回はK分割クロスバリデーションを用いた．これは与えられたデータセットをK個に分割し，K-1個をトレーニングデータ，1個をテストデータにして評価することをK回行って妥当性や信憑性を評価する手法である．
+
+	\subsection{グリッドサーチ}
+	各種アルゴリズムを用いる際にオプションとしてパラメータが設定できる．たとえばSVCの場合であれば正規化パラメータやカーネルタイプ等である．これら選択したパラメータの全パターンについて評価し最適なパラメータを見つけることをグリッドサーチという．
+
+	\section{方法}
+	Google Colaboratory上で白ワインの品質データを用いて機械学習を行う．データは
+	\url{https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/}
+	以下のwinequality-white.csvを用いた．
+
+	また，学習に用いる手法を以下の様にいくつか組み合わせ，各手法の効果を比較する．
+	\begin{enumerate}
+		\item SVCによる学習
+		\item SVC+ラベルの付け直し
+		\item SVC+ラベルの付け直し+クロスバリデーション
+		\item SVC+ラベルの付け直し+クロスバリデーション+グリッドサーチ
+	\end{enumerate}
+
+	\section{実行結果}
+	今回作成したソースコードをそれぞれ付録に示す．また，それらの実行結果を以下に示す．
+
+	\subsection{SVCのみ}
+	SVCのみの学習結果を以下に示す．
+
+	\begin{lstlisting}
+              precision    recall  f1-score   support
+
+           3       0.00      0.00      0.00         2
+           4       0.00      0.00      0.00        33
+           5       0.25      0.00      0.01       295
+           6       0.45      1.00      0.62       439
+           7       0.00      0.00      0.00       170
+           8       0.00      0.00      0.00        39
+           9       0.00      0.00      0.00         2
+
+    accuracy                           0.45       980
+   macro avg       0.10      0.14      0.09       980
+weighted avg       0.28      0.45      0.28       980
+
+0.44693877551020406
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し}
+	SVCとデータセットにおけるラベルの付け直しを行った学習結果を以下に示す．
+
+	\begin{lstlisting}
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        34
+           1       0.93      1.00      0.97       916
+           2       0.00      0.00      0.00        30
+
+    accuracy                           0.93       980
+   macro avg       0.31      0.33      0.32       980
+weighted avg       0.87      0.93      0.90       980
+
+0.9346938775510204
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し+クロスバリデーション}
+	上記の方法にクロスバリデーションを付け加えた場合の学習結果を以下に示す．
+
+	\begin{lstlisting}
+[0.91428571 0.93061224 0.93979592 0.92849847 0.91624106]
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し+クロスバリデーション+グリッドサーチ}
+	上記の方法にグリッドサーチを付け加えた場合の学習結果を以下に示す．ただし，グリッドサーチは正則化パラメータが1,10,100の場合かつカーネルがlinear,rbf(gamma=0.001,0.0001),sigmoid(gamma=0.001,0.0001)の場合で行った．
+
+	\begin{lstlisting}
+0.9214285714285714
+	\end{lstlisting}
+
+	\section{考察}
+	SVC単体の学習よりも，整形後のデータを用いた学習のほうが倍以上の精度をもっている．データ整形が機械学習に対して一定の効果を及ぼすことがわかる．
+	
+	また，クロスバリデーションを施した際の平均的な正解率が9割を超えているため，SVC+データ整形によって学習したモデルはそれなりに信頼ができるモデルであると言える．
+
+	グリッドサーチを行った際の正解率は他の手法で行った際と大きな差はない．むしろ多少ではあるが精度は落ちている．与えたパラメータの範囲にあるものよりもデフォルトのパラメータのほうが適していたとも言える．
+	グリッドサーチを行うと他の場合よりも時間がかかったため，何でもかんでも付け加えれば良いということでもないようだ．
+
+	\section{付録}
+	今回作成したソースコードを以下に示す．
+
+	\subsection{SVCのみ}
+	\begin{lstlisting}
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+import warnings
+
+df = pd.read_csv("winequality-white.csv", sep=";", encoding="utf-8")
+
+y = df["quality"]
+x = df.drop("quality", axis=1)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+model = SVC()
+model.fit(x_train, y_train)
+warnings.filterwarnings("ignore")
+
+y_pred = model.predict(x_test)
+
+print(classification_report(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し}
+	\begin{lstlisting}
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+import warnings
+
+df = pd.read_csv("winequality-white.csv", sep=";", encoding="utf-8")
+
+y = df["quality"]
+x = df.drop("quality", axis=1)
+
+new_list = []
+for v in list(y):
+  if v <= 4:
+    new_list += [0]
+  elif v <= 7:
+    new_list += [1]
+  else:
+    new_list += [2]
+y = new_list
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+model = SVC()
+model.fit(x_train, y_train)
+warnings.filterwarnings("ignore")
+
+y_pred = model.predict(x_test)
+
+print(classification_report(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し+クロスバリデーション}
+	\begin{lstlisting}
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+import warnings
+
+df = pd.read_csv("winequality-white.csv", sep=";", encoding="utf-8")
+
+y = df["quality"]
+x = df.drop("quality", axis=1)
+
+new_list = []
+for v in list(y):
+  if v <= 4:
+    new_list += [0]
+  elif v <= 7:
+    new_list += [1]
+  else:
+    new_list += [2]
+y = new_list
+
+warnings.filterwarnings("ignore")
+kfold_cv = KFold(n_splits=5, shuffle=True)
+
+model = SVC()
+scores = cross_val_score(model, x, y, cv=kfold_cv)
+
+print(scores)
+	\end{lstlisting}
+
+	\subsection{SVC+ラベルの付け直し+クロスバリデーション+グリッドサーチ}
+	\begin{lstlisting}
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+from sklearn.model_selection import GridSearchCV
+import warnings
+
+df = pd.read_csv("winequality-white.csv", sep=";", encoding="utf-8")
+
+y = df["quality"]
+x = df.drop("quality", axis=1)
+
+new_list = []
+for v in list(y):
+  if v <= 4:
+    new_list += [0]
+  elif v <= 7:
+    new_list += [1]
+  else:
+    new_list += [2]
+y = new_list
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+parameters = [
+             {"C": [1, 10, 100], "kernel": ["linear"]},
+             {"C": [1, 10, 100], "kernel": ["rbf"], "gamma": [0.001, 0.0001]},
+             {"C": [1, 10, 100], "kernel": ["sigmoid"], "gamma": [0.001, 0.0001]}
+]
+
+warnings.filterwarnings("ignore")
+kfold_cv = KFold(n_splits=5, shuffle=True)
+model = GridSearchCV(SVC(), parameters, cv=kfold_cv)
+model.fit(x_train, y_train)
+
+y_pred = model.predict(x_test)
+
+print(accuracy_score(y_test, y_pred))
+	\end{lstlisting}
+\end{document}

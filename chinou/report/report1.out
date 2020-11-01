@@ -1,0 +1,18 @@
+%このファイルは日本語文字を含みます.
+\BOOKMARK [1][-]{section.1}{目的}{}% 1
+\BOOKMARK [1][-]{section.2}{用語}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Support Vector Classification}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{クロスバリデーション}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{グリッドサーチ}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{方法}{}% 6
+\BOOKMARK [1][-]{section.4}{実行結果}{}% 7
+\BOOKMARK [2][-]{subsection.4.1}{SVCのみ}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.2}{SVC+ラベルの付け直し}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.3}{SVC+ラベルの付け直し+クロスバリデーション}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.4}{SVC+ラベルの付け直し+クロスバリデーション+グリッドサーチ}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{考察}{}% 12
+\BOOKMARK [1][-]{section.6}{付録}{}% 13
+\BOOKMARK [2][-]{subsection.6.1}{SVCのみ}{section.6}% 14
+\BOOKMARK [2][-]{subsection.6.2}{SVC+ラベルの付け直し}{section.6}% 15
+\BOOKMARK [2][-]{subsection.6.3}{SVC+ラベルの付け直し+クロスバリデーション}{section.6}% 16
+\BOOKMARK [2][-]{subsection.6.4}{SVC+ラベルの付け直し+クロスバリデーション+グリッドサーチ}{section.6}% 17
