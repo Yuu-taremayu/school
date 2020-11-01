@@ -47,6 +47,7 @@ def GaussSeidel_method(x0, y0, z0, A, b):
     return X, Y, Z, cnt
 
 if __name__ == '__main__':
+    
     A = np.array([[7, 1, 2],
                 [1, 8, 3],
                 [2, 3, 9]], dtype=float)
