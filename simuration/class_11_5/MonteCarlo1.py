@@ -27,4 +27,4 @@ if __name__ == '__main__':
 
     dataX, dataY = generate_random(a, b, maxY, t)
     p = montecarlo(t, dataX, dataY)
-    print((b-a) * maxY * p)
+    print('S =', (b-a) * maxY * p)
