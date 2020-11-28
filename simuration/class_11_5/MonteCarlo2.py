@@ -1,7 +1,7 @@
 import numpy as np
 
 def func(x):
-   return (1/np.sqrt(2*np.pi)) * np.exp(-x**2)
+   return (1/np.sqrt(2*np.pi)) * np.exp(-(x**2)/2)
 
 def generate_random(a, b, maxY, t):
     dataX = []
