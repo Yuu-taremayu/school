@@ -1,0 +1,12 @@
+%このファイルは日本語文字を含みます.
+\BOOKMARK [1][-]{section.1}{目的}{}% 1
+\BOOKMARK [1][-]{section.2}{用語}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{MNIST}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{K近傍法}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{方法}{}% 5
+\BOOKMARK [1][-]{section.4}{実行結果}{}% 6
+\BOOKMARK [1][-]{section.5}{付録}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{SVC+KFoldCV+GS}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{KNN+KFoldCV+GS}{section.5}% 9
+\BOOKMARK [2][-]{subsection.5.3}{データセットの一部を表示}{section.5}% 10
+\BOOKMARK [2][-]{subsection.5.4}{分類させた画像}{section.5}% 11
