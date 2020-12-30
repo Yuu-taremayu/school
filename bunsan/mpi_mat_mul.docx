@@ -9,13 +9,7 @@ static void mat_show(double m[N][N], int n);
 
 int main(int argc, char **argv)
 {
-	double a[N][N];
-	double b[N][N];
-	double c[N][N];
-	double rbuf_a[N][N];
-	double rbuf_b[N][N];
-	double rbuf_c[N][N];
-	int i, j;
+	static double a[N][N], b[N][N], c[N][N];
 	int np;
 	int my_rank;
 	MPI_Status status;
@@ -26,11 +20,11 @@ int main(int argc, char **argv)
 
 	mat_set(a, N);
 	mat_set(b, N);
-
-	MPI_Scatter(a, N*N/np, MPI_DOUBLE, rbuf_a, N*N/np, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	MPI_Bcast(b, N*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-	//mat_mul(a, b, c, np);
+	if (my_rank != 0) {
+	}
+	else {
+	}
+	mat_mul(a, b, c, np);
 	//mat_show(a, N);
 
 	MPI_Finalize();
