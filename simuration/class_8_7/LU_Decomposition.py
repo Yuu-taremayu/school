@@ -75,8 +75,11 @@ if __name__ == '__main__':
     # convert to ndarray from dataframe
     A = np.array(A)
     b = np.array(b)
+    print(A)
+    print(b)
 
     L, U = LU_Decomposition(A)
     x = calc_matrix(L, U, b)
 
     print(x)
+    print(A*x)
