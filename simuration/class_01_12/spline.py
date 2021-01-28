@@ -24,7 +24,8 @@ def spline1(_dataX, _dataY):
         v[i - 1] = 6 * (((_dataY[i + 1] - _dataY[i]) / h[i]) - ((_dataY[i] - _dataY[i - 1]) / h[i - 1]))
     print('v = ', v)
 
-    u = np.linalg.solve(A, v)
+    L, U = LU_Decomposition(A)
+    u = calc_matrix(L, U, v)
     print('u =', u)
     print('reslved =', np.dot(A, u))
 
@@ -85,6 +86,65 @@ def spline2(_dataX, _dataY):
     plt.plot(sampleX, y)
     plt.show()
     '''
+def LU_Decomposition(A):
+    N = len(A)
+
+    L = np.eye(N, N, 0, dtype=float)
+    U = np.zeros((N, N), dtype=float)
+
+    # LU Decomposition
+    # A = LU
+    # variable i processes to row direction
+    for i in range(N):
+        # variable j processes to column direction
+        # process for Lower triangular matrix
+        for j in range(i):
+            if j == 0:
+                L[i][j] = A[i][j] / U[j][j]
+            else:
+                temp = 0.0
+                for k in range(j):
+                    temp += L[i][k] * U[k][j]
+                L[i][j] = (A[i][j] - temp) / U[j][j]
+        # process for Upper triangular matrix
+        for j in range(i, N):
+            if i == 0:
+                U[i][j] = A[i][j]
+            else:
+                temp = 0.0
+                for k in range(i):
+                    temp += L[i][k] * U[k][j]
+                U[i][j] = A[i][j] - temp
+
+    print(L)
+    print(U)
+    print()
+
+    return L, U
+
+def calc_matrix(L, U, b):
+    N = len(L)
+    
+    x = np.zeros(N, dtype=float)
+    y = np.zeros(N, dtype=float)
+
+    # Ly = b
+    # process for y vector
+    for i in range(N):
+        temp = 0.0
+        for j in range(i):
+            temp += L[i][j] * y[j]
+        y[i] = b[i] - temp
+    
+    # Ux = y
+    # process for x vector(solution)
+    for i in reversed(range(N)):
+        temp = 0.0
+        for j in reversed(range(N - i)):
+            temp += U[i][N - 1 - j] * x[N - 1 - j]
+        x[i] = (y[i] - temp) / U[i][i]
+
+    return x
 
 def main():
     dataX = np.array([1, 2, 3, 4])
