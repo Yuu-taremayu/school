@@ -147,8 +147,8 @@ def calc_matrix(L, U, b):
     return x
 
 def main():
-    dataX = np.array([1, 2, 3, 4])
-    dataY = np.array([9, 4, 6, 3])
+    dataX = np.array([1, 2, 3, 4, 5])
+    dataY = np.array([9, 4, 6, 3, 2])
     print('data X =', dataX)
     print('data Y =', dataY)
 
@@ -156,7 +156,7 @@ def main():
     #spline1(dataX, dataY)
     #spline2(dataX, dataY)
 
-    sampleX = np.arange(1, 4.1, 0.1)
+    sampleX = np.arange(1, 5.1, 0.1)
     print('sample X =', sampleX)
 
     y = np.zeros(len(sampleX))
