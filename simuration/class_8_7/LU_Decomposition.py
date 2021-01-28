@@ -82,4 +82,4 @@ if __name__ == '__main__':
     x = calc_matrix(L, U, b)
 
     print(x)
-    print(A*x)
+    print(np.dot(A, x))
