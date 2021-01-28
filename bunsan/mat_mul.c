@@ -14,10 +14,10 @@
 /* % cc -mcmodel=medium mat_mul.c         */
 
 /* 行列の大きさ */
-#define N   (4000LL)
+#define N   (128LL)
 
 /* ブロックサイズ */
-#define B 20
+#define B 16
 
 /* 行列に値をセットする 　 */
 static void
@@ -41,12 +41,13 @@ main(void)
     static double a[N][N],b[N][N],c[N][N];
     double ts,te;
     
+    omp_set_num_threads(4);
     mat_set(a,N);
     mat_set(b,N);
     ts = omp_get_wtime();
     mat_mul(a,b,c,N);
     te = omp_get_wtime();
-    printf("N=%lld time %.2fs\n",N, te - ts);
+    printf("N=%lld time %lfs\n", N, te - ts);
     if (mat_is_identity(a,N) && mat_is_identity(b,N)){
         if (mat_is_identity(c,N)){
             printf("おめでとう! 単位行列×単位行列 = 単位行列　になりました\n");
@@ -55,7 +56,6 @@ main(void)
 	    printf("プログラムがまちがっているかも... 単位行列同士の積が単位行列になりませんでした\n");
 	}
     }
-    //mat_show(c,N);
 }
 
 void
@@ -92,7 +92,6 @@ mat_mul(double a[N][N], double b[N][N], double c[N][N],int n)
     }
 
     /* use OpenMP */
-    /*
     #pragma omp parallel for private(i, j, k)
     for (i = 0;i < n;i++) {
       for (j = 0;j < n;j++) {
@@ -101,7 +100,6 @@ mat_mul(double a[N][N], double b[N][N], double c[N][N],int n)
 	}
       }
     }
-    */
 
     /* change loop */
     /* 
@@ -133,21 +131,6 @@ mat_mul(double a[N][N], double b[N][N], double c[N][N],int n)
       }
     }
     */
-
-    #pragma omp parallel for private(i, j, k)
-    for (ii = 0;ii < n;ii += B) {
-      for (jj = 0;jj < n;jj += B) {
-	for (kk = 0;kk < n;kk += B) {
-	  for(i = ii;i < ii + B;i++){
-	    for(k = kk;k < kk + B;k++){
-	      for(j = jj;j < jj + B; j++){
-                c[i][j] = c[i][j] + a[i][k] * b[k][j];
-	      }
-	    }
-	  }
-	}
-      }
-    }
 }
 
 void
